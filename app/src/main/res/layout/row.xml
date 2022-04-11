@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swd"
+    android:orientation="vertical"
+    app:clickToClose="true"
+    android:background="#fff"
+    android:layout_width="match_parent"
+    android:layout_height="160dp">
+
+    <LinearLayout
+        android:id="@+id/linlur"
+        android:layout_width="101dp"
+        android:layout_height="match_parent"
+        android:background="@color/whittte"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <ImageView
+            android:id="@+id/like"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="62dp"
+            android:src="@drawable/like" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp">
+
+        <ImageView
+            android:id="@+id/imageCatalog"
+            android:layout_width="148dp"
+            android:layout_height="148dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="249dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Этот текст не должен быть виден"
+            android:textColor="@color/black"
+            android:textSize="21sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.714"
+            app:layout_constraintStart_toEndOf="@+id/imageCatalog"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="79dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/botn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/imageCatalog"
+            app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/txtPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="450 ₽"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView"
+            app:layout_constraintEnd_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+
+        <Button
+            android:id="@+id/btnBasket"
+            android:layout_width="128dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginRight="8dp"
+            android:backgroundTint="#E3128F"
+            android:text="В корзину"
+            android:visibility="visible"
+            app:background="@drawable/botn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.636"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+            app:layout_constraintVertical_bias="0.609" />
+
+        <ImageView
+            android:id="@+id/btnMinus"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginStart="20dp"
+            android:visibility="invisible"
+            android:src="@drawable/btnminus"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnPlus"
+            app:layout_constraintHorizontal_bias="0.075"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+            app:layout_constraintVertical_bias="0.69" />
+
+        <TextView
+            android:id="@+id/txtCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:layout_marginTop="14dp"
+            android:visibility="invisible"
+            android:textColor="@color/black"
+            android:textSize="32sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnPlus"
+            app:layout_constraintStart_toEndOf="@+id/btnMinus"
+            app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+            app:layout_constraintVertical_bias="0.717" />
+
+        <ImageView
+            android:id="@+id/btnPlus"
+            android:layout_marginTop="14dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/btnplus"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+            app:layout_constraintVertical_bias="0.69" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.daimajia.swipe.SwipeLayout>
