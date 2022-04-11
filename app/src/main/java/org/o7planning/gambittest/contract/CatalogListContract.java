@@ -10,6 +10,7 @@ public interface CatalogListContract {
     interface Model {
         interface onFinishedCall {
             void onResponse(ArrayList<Constructor> catalogArrayList);
+
             void onFailure(Throwable t);
         }
 
@@ -19,12 +20,15 @@ public interface CatalogListContract {
 
     interface View {
         void setDataToRecycleView(List<Constructor> catalogArrayList);
+
         void onResponseFailure(Throwable throwable);
     }
 
     interface Presenter {
         void onDestroy();
+
         void getMoreData(int pageNo);
+
         void requestDataFromServer();
     }
 }
