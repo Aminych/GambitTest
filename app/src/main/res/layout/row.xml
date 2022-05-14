@@ -11,7 +11,7 @@
     android:layout_height="160dp">
 
     <LinearLayout
-        android:id="@+id/linlur"
+        android:id="@+id/linearLayout"
         android:layout_width="101dp"
         android:layout_height="match_parent"
         android:background="@color/whittte"
@@ -24,7 +24,7 @@
             android:layout_height="30dp"
             android:layout_marginLeft="32dp"
             android:layout_marginTop="62dp"
-            android:src="@drawable/like" />
+            android:src="@drawable/liked" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -80,7 +80,6 @@
             app:layout_constraintStart_toStartOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="@+id/imageView" />
 
-
         <Button
             android:id="@+id/btnBasket"
             android:layout_width="128dp"
@@ -102,44 +101,44 @@
             android:id="@+id/btnMinus"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:layout_marginTop="14dp"
             android:layout_marginStart="20dp"
-            android:visibility="invisible"
+            android:layout_marginTop="14dp"
             android:src="@drawable/btnminus"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnPlus"
-            app:layout_constraintHorizontal_bias="0.075"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-            app:layout_constraintVertical_bias="0.69" />
+            app:layout_constraintVertical_bias="0.568" />
 
         <TextView
             android:id="@+id/txtCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
             android:text="0"
-            android:layout_marginTop="14dp"
-            android:visibility="invisible"
             android:textColor="@color/black"
             android:textSize="32sp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnPlus"
             app:layout_constraintStart_toEndOf="@+id/btnMinus"
             app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-            app:layout_constraintVertical_bias="0.717" />
+            app:layout_constraintVertical_bias="0.529" />
 
         <ImageView
             android:id="@+id/btnPlus"
-            android:layout_marginTop="14dp"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="24dp"
             android:src="@drawable/btnplus"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-            app:layout_constraintVertical_bias="0.69" />
+            app:layout_constraintVertical_bias="0.571" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.daimajia.swipe.SwipeLayout>

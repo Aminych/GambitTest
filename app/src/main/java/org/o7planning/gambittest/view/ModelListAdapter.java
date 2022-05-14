@@ -12,21 +12,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.squareup.picasso.Picasso;
 
 import org.o7planning.gambittest.R;
-import org.o7planning.gambittest.model.Constructor;
+import org.o7planning.gambittest.model.Model;
 
 import java.util.ArrayList;
 
-public class ConstructorListAdapter extends RecyclerView.Adapter<ConstructorListAdapter.MyViewHolder> {
-    private ArrayList<Constructor> constructorList;
-    private Context context;
+public class ModelListAdapter extends RecyclerView.Adapter<ModelListAdapter.MyViewHolder> {
+
+    private final ArrayList<Model> modelList;
+    private final Context context;
 
     SharedPreferences sPref;
+    SharedPreferences sPreff;
 
-    public ConstructorListAdapter(ArrayList<Constructor> constructorList, Context context) {
-        this.constructorList = constructorList;
+    public ModelListAdapter(ArrayList<Model> constructorList, Context context) {
+        this.modelList = constructorList;
         this.context = context;
     }
 
@@ -37,22 +40,27 @@ public class ConstructorListAdapter extends RecyclerView.Adapter<ConstructorList
         if (sPref == null) {
             sPref = parent.getContext().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         }
+        if (sPreff == null) {
+            sPreff = parent.getContext().getSharedPreferences("MyPref1", Context.MODE_PRIVATE);
+        }
         return new MyViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.bind(constructorList.get(position));
+        holder.bind(modelList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return constructorList.size();
+        return modelList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        Constructor currentModel;
+        private final SwipeLayout swd;
+
+        Model currentModel;
 
         TextView title;
         ImageView image, like, btnMinus, btnPlus;
@@ -63,6 +71,8 @@ public class ConstructorListAdapter extends RecyclerView.Adapter<ConstructorList
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            swd = itemView.findViewById(R.id.swd);
+
             title = itemView.findViewById(R.id.txtTitle);
             price = itemView.findViewById(R.id.txtPrice);
             image = itemView.findViewById(R.id.imageCatalog);
@@ -80,64 +90,40 @@ public class ConstructorListAdapter extends RecyclerView.Adapter<ConstructorList
                 btnMinus.setVisibility(View.INVISIBLE);
             }
 
-            btnBasket.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    count = 1;
-                    btnBasket.setVisibility(View.INVISIBLE);
-                    if (count > 0) {
-                        btnPlus.setVisibility(View.VISIBLE);
-                        countxt.setVisibility(View.VISIBLE);
-                        countxt.setText(Integer.toString(count));
-                        btnMinus.setVisibility(View.VISIBLE);
-                    }
-                }
-            });
-
-            btnPlus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    count += 1;
-                    countxt.setText(Integer.toString(count));
-                }
-            });
-
-            btnMinus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    count -= 1;
+            btnBasket.setOnClickListener(v -> {
+                count = 1;
+                btnBasket.setVisibility(View.GONE);
+                if (count > 0) {
                     btnPlus.setVisibility(View.VISIBLE);
                     countxt.setVisibility(View.VISIBLE);
                     countxt.setText(Integer.toString(count));
                     btnMinus.setVisibility(View.VISIBLE);
-                    if (count <= 0) {
-                        btnBasket.setVisibility(View.VISIBLE);
-                        btnPlus.setVisibility(View.INVISIBLE);
-                        countxt.setVisibility(View.INVISIBLE);
-                        countxt.setText(Integer.toString(count));
-                        btnMinus.setVisibility(View.INVISIBLE);
-                    }
                 }
             });
 
+            btnPlus.setOnClickListener(v -> {
+                count += 1;
+                countxt.setText(Integer.toString(count));
+                saveDataq(currentModel.getSectionId(), count);
+            });
 
-            like.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if (sPref.getBoolean(currentModel.getSectionId(), false)) {
-                        like.setImageResource(R.drawable.liked);
-                        saveData(currentModel.getSectionId(), false);
-                    } else {
-                        like.setImageResource(R.drawable.like);
-                        saveData(currentModel.getSectionId(), true);
-                    }
-                    notifyItemRangeChanged(0, constructorList.size(), false);
+            btnMinus.setOnClickListener(v -> {
+                count -= 1;
+                btnPlus.setVisibility(View.VISIBLE);
+                countxt.setVisibility(View.VISIBLE);
+                countxt.setText(Integer.toString(count));
+                btnMinus.setVisibility(View.VISIBLE);
+                if (count <= 0) {
+                    btnBasket.setVisibility(View.VISIBLE);
+                    btnPlus.setVisibility(View.GONE);
+                    countxt.setVisibility(View.GONE);
+                    countxt.setText(Integer.toString(count));
+                    btnMinus.setVisibility(View.GONE);
                 }
             });
         }
 
-        public void bind(Constructor model) {
+        public void bind(Model model) {
             currentModel = model;
 
             title.setText(model.getSectionTitle());
@@ -147,16 +133,37 @@ public class ConstructorListAdapter extends RecyclerView.Adapter<ConstructorList
                     .into(image);
 
 
-            if (sPref.getBoolean(currentModel.getSectionId(), false)) {
-                like.setImageResource(R.drawable.liked);
+//            if (sPref.getBoolean(currentModel.getSectionId(), false)) {
+//                like.setImageResource(R.drawable.liked);
+//            } else {
+//                like.setImageResource(R.drawable.like);
+//            }
+
+            String a = sPreff.getString(currentModel.getSectionId(), " ");
+
+            if (model.getSectionId() == sPreff.getString(currentModel.getSectionId(), " ")) {
+                btnBasket.setVisibility(View.GONE);
+                btnMinus.setVisibility(View.VISIBLE);
+                btnPlus.setVisibility(View.VISIBLE);
+                countxt.setVisibility(View.VISIBLE);
+
             } else {
-                like.setImageResource(R.drawable.like);
+                btnBasket.setVisibility(View.VISIBLE);
+                btnMinus.setVisibility(View.GONE);
+                btnPlus.setVisibility(View.GONE);
+                countxt.setVisibility(View.GONE);
             }
         }
 
         public void saveData(String id, boolean flag) {
             SharedPreferences.Editor ed = sPref.edit();
             ed.putBoolean(id, flag);
+            ed.apply();
+        }
+
+        public void saveDataq(String id, int count) {
+            SharedPreferences.Editor ed = sPreff.edit();
+            ed.putInt(id, count);
             ed.apply();
         }
     }

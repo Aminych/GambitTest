@@ -7,25 +7,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.daimajia.swipe.SwipeLayout;
-
 import org.o7planning.gambittest.R;
-import org.o7planning.gambittest.contract.CatalogListContract;
-import org.o7planning.gambittest.model.Constructor;
-import org.o7planning.gambittest.presenter.CatalogPresenter;
-import org.o7planning.gambittest.view.ConstructorListAdapter;
+import org.o7planning.gambittest.contract.ProductListContract;
+import org.o7planning.gambittest.model.Model;
+import org.o7planning.gambittest.presenter.ProductPresenter;
+import org.o7planning.gambittest.view.ModelListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements CatalogListContract.View {
+public class MainActivity extends AppCompatActivity implements ProductListContract.View {
 
-    private SwipeLayout swd;
+//    private SwipeLayout swd;
 
-    private CatalogPresenter catalogPresenter;
+    private ProductPresenter productPresenter;
     private RecyclerView rvCatalog;
-    private ArrayList<Constructor> constructorList;
-    private ConstructorListAdapter constructorListAdapter;
+    private ArrayList<Model> modelList;
     private LinearLayoutManager layoutManager;
 
     @Override
@@ -34,26 +31,27 @@ public class MainActivity extends AppCompatActivity implements CatalogListContra
         setContentView(R.layout.activity_main);
 
         rvCatalog = findViewById(R.id.rvAdapter);
-        swd = findViewById(R.id.swd);
+
+//        swd = findViewById(R.id.swd);
 
         layoutManager = new LinearLayoutManager(this);
         rvCatalog.setLayoutManager(new LinearLayoutManager(this));
         rvCatalog.setHasFixedSize(true);
 
 //        swd.setShowMode(SwipeLayout.ShowMode.PullOut);
-//        swd.addDrag(SwipeLayout.DragEdge.Right, swd.findViewById(R.id.linlur));
+//        swd.addDrag(SwipeLayout.DragEdge.Right, swd.findViewById(R.id.layoutSwipe));
 
-        constructorList = new ArrayList<Constructor>();
+        modelList = new ArrayList<Model>();
 
-        catalogPresenter = new CatalogPresenter(this);
-        catalogPresenter.requestDataFromServer();
+        productPresenter = new ProductPresenter(this);
+        productPresenter.requestDataFromServer();
     }
 
     @Override
-    public void setDataToRecycleView(List<Constructor> catalogArrayList) {
-        constructorList.addAll(catalogArrayList);
-        constructorListAdapter = new ConstructorListAdapter(constructorList, MainActivity.this);
-        rvCatalog.setAdapter(constructorListAdapter);
+    public void setDataToRecycleView(List<Model> catalogArrayList) {
+        modelList.addAll(catalogArrayList);
+        ModelListAdapter modelListAdapter = new ModelListAdapter(modelList, MainActivity.this);
+        rvCatalog.setAdapter(modelListAdapter);
     }
 
     @Override

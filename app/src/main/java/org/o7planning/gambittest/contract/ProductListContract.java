@@ -1,15 +1,15 @@
 package org.o7planning.gambittest.contract;
 
-import org.o7planning.gambittest.model.Constructor;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public interface CatalogListContract {
+public interface ProductListContract {
 
     interface Model {
+
         interface onFinishedCall {
-            void onResponse(ArrayList<Constructor> catalogArrayList);
+
+            void onResponse(ArrayList<org.o7planning.gambittest.model.Model> catalogArrayList);
 
             void onFailure(Throwable t);
         }
@@ -19,12 +19,14 @@ public interface CatalogListContract {
     }
 
     interface View {
-        void setDataToRecycleView(List<Constructor> catalogArrayList);
+
+        void setDataToRecycleView(List<org.o7planning.gambittest.model.Model> catalogArrayList);
 
         void onResponseFailure(Throwable throwable);
     }
 
     interface Presenter {
+
         void onDestroy();
 
         void getMoreData(int pageNo);

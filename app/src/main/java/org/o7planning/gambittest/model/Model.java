@@ -3,7 +3,7 @@ package org.o7planning.gambittest.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Constructor {
+public class Model {
     @SerializedName("id")
     private String sectionId;
 
