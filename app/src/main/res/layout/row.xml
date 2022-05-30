@@ -11,7 +11,7 @@
     android:layout_height="160dp">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/swipedLayout"
         android:layout_width="101dp"
         android:layout_height="match_parent"
         android:background="@color/whittte"
@@ -19,7 +19,7 @@
         android:weightSum="1">
 
         <ImageView
-            android:id="@+id/like"
+            android:id="@+id/imageLike"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="32dp"

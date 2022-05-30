@@ -1,3 +1,4 @@
+
 package org.o7planning.gambittest.view;
 
 import android.content.Context;
@@ -26,7 +27,8 @@ public class ModelListAdapter extends RecyclerView.Adapter<ModelListAdapter.MyVi
     private final Context context;
 
     SharedPreferences sPref;
-    SharedPreferences sPreff;
+    SharedPreferences prefCount;
+    SharedPreferences prefLike;
 
     public ModelListAdapter(ArrayList<Model> constructorList, Context context) {
         this.modelList = constructorList;
@@ -40,8 +42,11 @@ public class ModelListAdapter extends RecyclerView.Adapter<ModelListAdapter.MyVi
         if (sPref == null) {
             sPref = parent.getContext().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         }
-        if (sPreff == null) {
-            sPreff = parent.getContext().getSharedPreferences("MyPref1", Context.MODE_PRIVATE);
+        if (prefCount == null) {
+            prefCount = parent.getContext().getSharedPreferences("PREF_COUNT", Context.MODE_PRIVATE);
+        }
+        if (prefLike == null) {
+            prefLike = parent.getContext().getSharedPreferences("PREF_LIKE", Context.MODE_PRIVATE);
         }
         return new MyViewHolder(v);
     }
@@ -58,40 +63,72 @@ public class ModelListAdapter extends RecyclerView.Adapter<ModelListAdapter.MyVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private final SwipeLayout swd;
+        private SwipeLayout swipeLayout;
 
         Model currentModel;
-
         TextView title;
-        ImageView image, like, btnMinus, btnPlus;
+        ImageView image, imageLike, btnMinus, btnPlus;
         TextView price, countxt;
         Button btnBasket;
         int count;
         boolean flag = true;
+        boolean imageLikeBool;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            swd = itemView.findViewById(R.id.swd);
-
+            swipeLayout = itemView.findViewById(R.id.swd);
             title = itemView.findViewById(R.id.txtTitle);
             price = itemView.findViewById(R.id.txtPrice);
             image = itemView.findViewById(R.id.imageCatalog);
-
             countxt = itemView.findViewById(R.id.txtCount);
-
-            like = itemView.findViewById(R.id.like);
+            imageLike = itemView.findViewById(R.id.imageLike);
             btnBasket = itemView.findViewById(R.id.btnBasket);
             btnMinus = itemView.findViewById(R.id.btnMinus);
             btnPlus = itemView.findViewById(R.id.btnPlus);
 
-            if (count <= 0) {
-                btnPlus.setVisibility(View.INVISIBLE);
-                countxt.setVisibility(View.INVISIBLE);
-                btnMinus.setVisibility(View.INVISIBLE);
+            swipeLayoutForRecItem();
+        }
+
+        public void bind(Model model) {
+            currentModel = model;
+
+            // При показе товаров в листе, для локального счетчика берем значения из шередов
+            // Если не будем брать с шаредов, то значение count при каждой инициализации товаров в листе будет равняться 0
+            count = getCount();
+            imageLikeBool = prefLike.getBoolean(String.valueOf(currentModel.getSectionId()), true);
+
+            title.setText(model.getSectionTitle());
+            price.setText(model.getPrice());
+            Picasso.get()
+                    .load(model.getSectionImage())
+                    .into(image);
+
+            countxt.setText(String.valueOf(getCount()));
+
+            // ImageLike при входе в активити
+            if (prefLike.getBoolean(currentModel.getSectionId(), imageLikeBool)) {
+                imageLike.setImageResource(R.drawable.like);
+            } else {
+                imageLike.setImageResource(R.drawable.liked);
+            }
+
+            if (getCount() >= 1) {
+                btnBasket.setVisibility(View.GONE);
+                btnMinus.setVisibility(View.VISIBLE);
+                btnPlus.setVisibility(View
+
+                        .VISIBLE);
+                countxt.setVisibility(View.VISIBLE);
+            } else {
+                btnBasket.setVisibility(View.VISIBLE);
+                btnMinus.setVisibility(View.GONE);
+                btnPlus.setVisibility(View.GONE);
+                countxt.setVisibility(View.GONE);
             }
 
             btnBasket.setOnClickListener(v -> {
                 count = 1;
+                saveDataCount(currentModel.getSectionId(), count);
                 btnBasket.setVisibility(View.GONE);
                 if (count > 0) {
                     btnPlus.setVisibility(View.VISIBLE);
@@ -104,67 +141,95 @@ public class ModelListAdapter extends RecyclerView.Adapter<ModelListAdapter.MyVi
             btnPlus.setOnClickListener(v -> {
                 count += 1;
                 countxt.setText(Integer.toString(count));
-                saveDataq(currentModel.getSectionId(), count);
+                saveDataCount(currentModel.getSectionId(), count);
             });
 
             btnMinus.setOnClickListener(v -> {
                 count -= 1;
-                btnPlus.setVisibility(View.VISIBLE);
-                countxt.setVisibility(View.VISIBLE);
-                countxt.setText(Integer.toString(count));
-                btnMinus.setVisibility(View.VISIBLE);
-                if (count <= 0) {
+                saveDataCount(currentModel.getSectionId(), count);
+                if (count < 1) {
                     btnBasket.setVisibility(View.VISIBLE);
+                    btnMinus.setVisibility(View.GONE);
                     btnPlus.setVisibility(View.GONE);
                     countxt.setVisibility(View.GONE);
+                } else {
+                    btnPlus.setVisibility(View.VISIBLE);
+                    countxt.setVisibility(View.VISIBLE);
                     countxt.setText(Integer.toString(count));
-                    btnMinus.setVisibility(View.GONE);
+                    btnMinus.setVisibility(View.VISIBLE);
                 }
             });
         }
 
-        public void bind(Model model) {
-            currentModel = model;
-
-            title.setText(model.getSectionTitle());
-            price.setText(model.getPrice());
-            Picasso.get()
-                    .load(model.getSectionImage())
-                    .into(image);
-
-
-//            if (sPref.getBoolean(currentModel.getSectionId(), false)) {
-//                like.setImageResource(R.drawable.liked);
-//            } else {
-//                like.setImageResource(R.drawable.like);
-//            }
-
-            String a = sPreff.getString(currentModel.getSectionId(), " ");
-
-            if (model.getSectionId() == sPreff.getString(currentModel.getSectionId(), " ")) {
-                btnBasket.setVisibility(View.GONE);
-                btnMinus.setVisibility(View.VISIBLE);
-                btnPlus.setVisibility(View.VISIBLE);
-                countxt.setVisibility(View.VISIBLE);
-
-            } else {
-                btnBasket.setVisibility(View.VISIBLE);
-                btnMinus.setVisibility(View.GONE);
-                btnPlus.setVisibility(View.GONE);
-                countxt.setVisibility(View.GONE);
-            }
-        }
-
-        public void saveData(String id, boolean flag) {
-            SharedPreferences.Editor ed = sPref.edit();
-            ed.putBoolean(id, flag);
-            ed.apply();
-        }
-
-        public void saveDataq(String id, int count) {
-            SharedPreferences.Editor ed = sPreff.edit();
+        public void saveDataCount(String id, int count) {
+            SharedPreferences.Editor ed = prefCount.edit();
             ed.putInt(id, count);
             ed.apply();
+        }
+
+        public Integer getCount() {
+            // Получаем кол-во счетчика товара по id
+            return prefCount.getInt(currentModel.getSectionId(), 0);
+        }
+
+        public void saveDataImageLike(String id, boolean dataToSave) {
+            SharedPreferences.Editor editor = prefLike.edit();
+            editor.putBoolean(id, dataToSave);
+            editor.apply();
+        }
+
+        public void swipeLayoutForRecItem() {
+            // Реализация SwipeLayout
+            swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+            swipeLayout.addDrag(SwipeLayout.DragEdge.Right, swipeLayout.findViewById(R.id.swipedLayout));
+            swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+
+                @Override
+                public void onStartOpen(SwipeLayout layout) {
+
+                }
+
+                // Открытие свайпа: закрасить image. Повторное открытие: убрать закрашивание image
+                @Override
+                public void onOpen(SwipeLayout layout) {
+                    if (imageLikeBool) {
+                        imageLike.setImageResource(R.drawable.liked);
+                        imageLikeBool = false;
+
+                    } else {
+                        imageLike.setImageResource(R.drawable.like);
+                        imageLikeBool = true;
+                    }
+                    saveDataImageLike(String.valueOf(currentModel.getSectionId()), imageLikeBool);
+                }
+
+                @Override
+                public void onStartClose(SwipeLayout layout) {
+
+                }
+
+                @Override
+                public void onClose(SwipeLayout layout) {
+
+                }
+
+                @Override
+                public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+
+                }
+
+                // Автоматическое закрытие свайпа через 1 секунду
+                @Override
+                public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+                    layout.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            layout.close();
+
+                        }
+                    }, 1000);
+                }
+            });
         }
     }
 }
