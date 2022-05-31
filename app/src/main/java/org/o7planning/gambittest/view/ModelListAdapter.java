@@ -92,8 +92,6 @@ public class ModelListAdapter extends RecyclerView.Adapter<ModelListAdapter.MyVi
         public void bind(Model model) {
             currentModel = model;
 
-            // При показе товаров в листе, для локального счетчика берем значения из шередов
-            // Если не будем брать с шаредов, то значение count при каждой инициализации товаров в листе будет равняться 0
             count = getCount();
             imageLikeBool = prefLike.getBoolean(String.valueOf(currentModel.getSectionId()), true);
 
@@ -105,7 +103,6 @@ public class ModelListAdapter extends RecyclerView.Adapter<ModelListAdapter.MyVi
 
             countxt.setText(String.valueOf(getCount()));
 
-            // ImageLike при входе в активити
             if (prefLike.getBoolean(currentModel.getSectionId(), imageLikeBool)) {
                 imageLike.setImageResource(R.drawable.like);
             } else {
@@ -168,7 +165,6 @@ public class ModelListAdapter extends RecyclerView.Adapter<ModelListAdapter.MyVi
         }
 
         public Integer getCount() {
-            // Получаем кол-во счетчика товара по id
             return prefCount.getInt(currentModel.getSectionId(), 0);
         }
 
@@ -189,7 +185,6 @@ public class ModelListAdapter extends RecyclerView.Adapter<ModelListAdapter.MyVi
 
                 }
 
-                // Открытие свайпа: закрасить image. Повторное открытие: убрать закрашивание image
                 @Override
                 public void onOpen(SwipeLayout layout) {
                     if (imageLikeBool) {
@@ -218,7 +213,6 @@ public class ModelListAdapter extends RecyclerView.Adapter<ModelListAdapter.MyVi
 
                 }
 
-                // Автоматическое закрытие свайпа через 1 секунду
                 @Override
                 public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
                     layout.postDelayed(new Runnable() {
